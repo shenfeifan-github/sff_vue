@@ -6,6 +6,7 @@ import Home from './components/Home.vue'
 import Subject from './components/subject.vue'
 import MyDefault from './components/MyDefault.vue'
 import Login from './components/Login.vue'
+import User from './components/User.vue'
 import { compile } from 'vue'
 const router=createRouter({
     history:createWebHashHistory(),
@@ -33,6 +34,10 @@ const router=createRouter({
                 {
                     path:"/Team",
                     component:Team  
+                },
+                {
+                    path:"/user",
+                    component:User
                 }
             ]
         },

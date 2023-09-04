@@ -20,6 +20,9 @@
            <el-menu-item index="/team">
               <el-icon><IEpSetting/></el-icon> <span>班级信息</span>
            </el-menu-item>
+           <el-menu-item index="/user">
+              <el-icon><IEpSetting/></el-icon> <span>用户信息</span>
+           </el-menu-item>
         </el-menu>
     </el-aside>    
 </template>

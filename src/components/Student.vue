@@ -57,7 +57,7 @@ export default{
         axios({
         method: "post",
         headers: {'Content-Type': 'application/json'},
-        url:"http://localhost:8080/user/getUser",
+        url:"http://localhost:8080/student/getStudent",
         data:JSON.stringify({pageSize:10,PageNum:this.page}),
     })
         
@@ -75,7 +75,7 @@ export default{
         axios({
         method: "post",
         headers: {'Content-Type': 'application/json'},
-        url:"http://localhost:8080/user/getUser",
+        url:"http://localhost:8080/student/getStudent",
         data:JSON.stringify({pageSize:10,pageNum:this.page}),
          })
        .then(res=>{
