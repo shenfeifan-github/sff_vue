@@ -1,20 +1,26 @@
 <template>
-  <div class="search">
-    <el-input v-model="input" placeholder="请输入姓名"></el-input>
-   <el-select v-model="value" placeholder="请选择班级">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
+
+<el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item >
+    <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
+  </el-form-item>
+  <el-form-item >
+    <el-select v-model="value" placeholder="请选择班级">
+    <el-option 
+      v-for="item in team" @change="change"	
+      :key="item.codeshare"
+      :label="item.className"
+      :value="item.codeshare">
     </el-option>
   </el-select>
-  <el-row>
-  <el-button type="primary" round class="but4">查询</el-button>
-  <el-button type="success" round class="but2">导出</el-button>  
-  
-</el-row>
-  </div>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="getGrade()">查询</el-button>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="success" @click="onSubmit">导出</el-button>
+  </el-form-item>
+</el-form>
 
 
     <el-table
@@ -82,8 +88,13 @@ export default{
         return{
           tableData:[],
           total:String,
+          team:[],
           page:1,
-          input: ''
+          input: '',
+          formQuery: {
+          paramOne: '',
+          value: ''
+        }
         }
        },
        mounted(){
@@ -92,16 +103,42 @@ export default{
         headers: {'Content-Type': 'application/json'},
         url:"http://localhost:8080/score/getScore",
         data:JSON.stringify({}),
-    })
+         })
        .then(res=>{
         this.tableData=res.data.data.list
         this.total=res.data.data.total
         console.log(res)
        }).catch(function (error){ 
         console.log(error);
+      });
+      axios({
+        method: "get",
+        url:"http://localhost:8080/grade/getGradeName",
+    })
+       .then(res=>{
+       this.team=res.data.data
+        console.log(res)
+       }).catch(function (error){ 
+        console.log(error);
       })
     },
     methods:{
+     getGrade(){
+          axios({
+        method: "post",
+        headers: {'Content-Type': 'application/json'},
+        url:"http://localhost:8080/score/getScore",
+        data:JSON.stringify({}),
+         })
+       .then(res=>{
+        this.tableData=res.data.data.list
+        this.total=res.data.data.total
+        console.log(res)
+       }).catch(function (error){ 
+        console.log(error);
+      });
+        },
+       
       handleCurrentChange(val){
         this.page=val
         axios({
@@ -118,6 +155,9 @@ export default{
         console.log(error);
       })
   },
+  change(val){
+    this.team=val
+  }
       }
 
 }
@@ -145,10 +185,10 @@ export default{
       margin: auto;
       margin-right: 70px;
     }
-    .but2{
+    #but2{
       position: absolute;
       top: 20px;
-      left: 580px;
+      left:1000px;
     }
   }
 </style>

@@ -1,11 +1,18 @@
 <template>
-     <div class="search">
-    <el-input v-model="input" placeholder="班级名称/班号"></el-input>
-    <el-input v-model="input" placeholder="班长/班主任/学习委员"></el-input>
-  <el-row>
-  <el-button type="primary" round class="but1">查询</el-button>   
-</el-row>
-  </div>
+       <el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item >
+    <el-input v-model="formQuery.paramOne" placeholder="班号/班级名称"></el-input>
+  </el-form-item>
+  <el-form-item >
+    <el-input v-model="formQuery.paramTwo" placeholder="班主任/班长/学习委员"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="success" @click="onSubmit">新增</el-button>
+  </el-form-item>
+</el-form>
      <el-table
     :data="tableData"
     style="width: 100%">
@@ -60,7 +67,11 @@ export default{
     data(){
         return{
           tableData:[],
-          total:String
+          total:String,
+          formQuery: {
+          paramOne: '',
+          paramTwo: ''
+        }
         }
        },
        mounted(){
@@ -82,13 +93,7 @@ export default{
 
 </script>
 <style>
-   .el-pagination{
-        position: absolute;
-        top: 570px;
-        left: 460px;
-      
-   }
-
+  
    .search{
     display:flex;
     width: 600px;

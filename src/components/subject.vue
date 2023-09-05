@@ -3,7 +3,6 @@
         <div class="ee">
             <RouterView></RouterView>
         </div>
-       
     </el-main>
     
 </template>
@@ -16,11 +15,8 @@
 
   .ee{
         border-radius: 5px;
-        width: 1173px;
-        height: 640px;
-        position: absolute;
-        top: 75px;
-        left: 215px;
+        width: 100%;
+        height: 100%;
         background-color: beige;
     }
 </style>

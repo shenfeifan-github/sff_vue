@@ -4,10 +4,9 @@
 
 <template>
    <el-aside>
-   
        <el-menu router>
             <a class="logo">
-                <img src="../assets/logo.png" class="img">
+                <img src="../assets/logo1.png" class="img">
                 <h1>学生系统</h1>
             </a>
         
@@ -49,8 +48,8 @@ align-items: center;
 background-color: #eee
 }
 .img{
-    width: 32px;
-    height: 32px
+    width: 25px;
+    height: 25px
     
 }
 

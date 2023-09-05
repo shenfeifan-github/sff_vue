@@ -1,4 +1,18 @@
 <template>
+  <el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item >
+    <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
+  </el-form-item>
+  <el-form-item >
+    <el-input v-model="formQuery.paramTwo" placeholder="学号/班号"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="success" @click="onSubmit">新增</el-button>
+  </el-form-item>
+</el-form>
   <el-table
     :data="tableData"
     style="width: 100%">
@@ -48,6 +62,10 @@ export default{
           tableData:[],
           total:String,
           page:1,
+          formQuery: {
+          paramOne: '',
+          paramTwo: ''
+        }
          
         }
        },
@@ -93,5 +111,8 @@ export default{
 <style>
   .el-table-column{
     text-align: center;
+    }
+    .el-form {
+      margin-left: 20px;
     }
 </style>

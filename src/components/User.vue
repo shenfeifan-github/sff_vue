@@ -1,27 +1,35 @@
 <template>
-    <div class="search">
-   <el-input v-model="input" placeholder="用户名称"></el-input>
-   <el-input v-model="input" placeholder="手机号"></el-input>
- <el-row>
- <el-button type="primary" round class="but1">查询</el-button>   
-</el-row>
- </div>
+   <el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form-item >
+    <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
+  </el-form-item>
+  <el-form-item >
+    <el-input v-model="formQuery.paramTwo" placeholder="学号/班号"></el-input>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+  <el-form-item>
+    <el-button type="success" @click="onSubmit">新增</el-button>
+  </el-form-item>
+</el-form>
     <el-table
    :data="tableData"
    style="width: 100%">
    <el-table-column
      prop="userName"
      label="用户名称"
-     width="100">
+     width="180">
    </el-table-column>
    <el-table-column
      prop="phone"
      label="手机号"
-     width="180">
+     width="150">
    </el-table-column>
    <el-table-column
      prop="account"
-     label="密码">
+     label="密码"
+     width="150">
    </el-table-column>
    <el-table-column
      prop="profile"
@@ -45,7 +53,7 @@
    </el-table-column>
    <el-table-column
      label="操作"
-     width="250">
+     width="200">
      <el-row>
        <el-button type="success">编辑</el-button>
        <el-button type="danger">删除</el-button>
@@ -67,7 +75,11 @@ export default{
    data(){
        return{
          tableData:[],
-         total:String
+         total:String,
+         formQuery: {
+          paramOne: '',
+          paramTwo: ''
+        }
        }
       },
       mounted(){
@@ -107,26 +119,24 @@ export default{
 
 </script>
 <style>
-  .el-pagination{
-       position: absolute;
-       top: 570px;
-       left: 460px;
-     
-  }
-
   .search{
    display:flex;
    width: 600px;
    height: 70px;
+   
    .el-input{
      width: 180px;
      height: 40px;
      margin: auto;
      margin-left: 20px;
    }
-   .but1{
-     margin: auto;
-     margin-right: 70px;
-   }
+ 
+
  }
+ .el-pagination{
+  position: absolute;
+  top: 90%;
+   margin-left:40%;
+}
+
 </style>

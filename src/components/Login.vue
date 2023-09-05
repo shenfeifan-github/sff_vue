@@ -79,9 +79,14 @@ export default {
 </script>
 
 <style>
+.body{
+  display:flex;
+  height: 800px;
+  width: 100%;
+}
   #postter{
     background-color: #eee;
-    height: 730px;
+    height: 800px;
     background-image:url('../assets/2.jpg');
     background-size:100% 100%;
   }
