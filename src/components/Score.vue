@@ -1,11 +1,11 @@
 <template>
 
-<el-form :inline="true" :model="formInline" class="demo-form-inline">
+<el-form :inline="true" :model="formQuery" class="demo-form-inline">
   <el-form-item >
     <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
   </el-form-item>
   <el-form-item >
-    <el-select v-model="value" placeholder="请选择班级">
+    <el-select v-model="team.value" placeholder="请选择班级">
     <el-option 
       v-for="item in team" @change="change"	
       :key="item.codeshare"
@@ -15,7 +15,7 @@
   </el-select>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="getGrade()">查询</el-button>
+    <el-button type="primary" @click="getScore()">查询</el-button>
   </el-form-item>
   <el-form-item>
     <el-button type="success" @click="onSubmit">导出</el-button>
@@ -88,12 +88,18 @@ export default{
         return{
           tableData:[],
           total:String,
-          team:[],
+          team:[
+            {className:'',
+            classNumber:''
+             }
+          ],
           page:1,
           input: '',
+          
           formQuery: {
           paramOne: '',
-          value: ''
+
+         
         }
         }
        },
@@ -102,7 +108,7 @@ export default{
         method: "post",
         headers: {'Content-Type': 'application/json'},
         url:"http://localhost:8080/score/getScore",
-        data:JSON.stringify({}),
+        data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,classNumber:this.team.classNumber}),
          })
        .then(res=>{
         this.tableData=res.data.data.list
@@ -123,12 +129,12 @@ export default{
       })
     },
     methods:{
-     getGrade(){
+     getScore(){
           axios({
         method: "post",
         headers: {'Content-Type': 'application/json'},
         url:"http://localhost:8080/score/getScore",
-        data:JSON.stringify({}),
+        data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,classNumber:this.team.value}),
          })
        .then(res=>{
         this.tableData=res.data.data.list
@@ -145,7 +151,7 @@ export default{
         method: "post",
         headers: {'Content-Type': 'application/json'},
         url:"http://localhost:8080/score/getScore",
-        data:JSON.stringify({pageSize:10,pageNum:this.page}),
+        data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,classNumber:this.team.value}),
          })
        .then(res=>{
         this.tableData=res.data.data.list
@@ -157,6 +163,7 @@ export default{
   },
   change(val){
     this.team=val
+    console.log(val)
   }
       }
 

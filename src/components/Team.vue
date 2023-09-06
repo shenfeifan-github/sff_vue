@@ -1,5 +1,5 @@
 <template>
-       <el-form :inline="true" :model="formInline" class="demo-form-inline">
+       <el-form :inline="true" :model="formQuery" class="demo-form-inline">
   <el-form-item >
     <el-input v-model="formQuery.paramOne" placeholder="班号/班级名称"></el-input>
   </el-form-item>
@@ -7,7 +7,7 @@
     <el-input v-model="formQuery.paramTwo" placeholder="班主任/班长/学习委员"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">查询</el-button>
+    <el-button type="primary" @click="getTeam()">查询</el-button>
   </el-form-item>
   <el-form-item>
     <el-button type="success" @click="onSubmit">新增</el-button>
@@ -88,6 +88,23 @@ export default{
        }).catch(function (error){ 
         console.log(error);
       })
+    },
+    methods:{
+      getTeam(){
+        axios({
+        method: "post",
+        headers: {'Content-Type': 'application/json'},
+        url:"http://localhost:8080/grade/getGrade",
+        data:JSON.stringify({paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
+    })
+       .then(res=>{
+        this.tableData=res.data.data.list
+        this.total=res.data.data.total
+        console.log(res)
+       }).catch(function (error){ 
+        console.log(error);
+      })
+      }
     }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <el-form :inline="true" :model="formQuery" class="demo-form-inline">
   <el-form-item >
     <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
   </el-form-item>
@@ -7,7 +7,7 @@
     <el-input v-model="formQuery.paramTwo" placeholder="学号/班号"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">查询</el-button>
+    <el-button type="primary" @click="getStudent()">查询</el-button>
   </el-form-item>
   <el-form-item>
     <el-button type="success" @click="onSubmit">新增</el-button>
@@ -88,13 +88,29 @@ export default{
       })
   },
      methods:{
+      getStudent(){
+        axios({
+        method: "post",
+        headers: {'Content-Type': 'application/json'},
+        url:"http://localhost:8080/student/getStudent",
+        data:JSON.stringify({paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
+    })
+        
+       .then(res=>{
+        this.tableData=res.data.data.list
+        this.total=res.data.data.total
+        console.log(res)
+       }).catch(function (error){ 
+        console.log(error);
+      })
+      },
       handleCurrentChange(val){
         this.page=val
         axios({
         method: "post",
         headers: {'Content-Type': 'application/json'},
         url:"http://localhost:8080/student/getStudent",
-        data:JSON.stringify({pageSize:10,pageNum:this.page}),
+        data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
          })
        .then(res=>{
         this.tableData=res.data.data.list

@@ -16,9 +16,13 @@
       <template v-slot:dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>
-            <el-button type="primary" icon="el-icon-check">
+            <el-button type="primary" icon="el-icon-check"  @click="open">
                 用户信息</el-button>
             </el-dropdown-item>
+            <el-dropdown-item>
+            <el-button type="warning" icon="el-icon-check"
+              >修改头像</el-button
+            ></el-dropdown-item>
           <el-dropdown-item>
             <el-button type="danger" icon="el-icon-check"
               >退出登录</el-button
@@ -33,7 +37,17 @@
   export default {
     data () {
       return {
-        url: "",
+        url: "https://shenfeifan.oss-cn-guangzhou.aliyuncs.com/2023-09-06/135024.jpg",
+      }
+    },
+    methods: {
+      open() {
+        this.$alert('message', '用户信息', {
+          confirmButtonText: '确定',
+          callback: action => {
+           
+          }
+        });
       }
     }
   }

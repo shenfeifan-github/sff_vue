@@ -4,10 +4,10 @@
     <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
   </el-form-item>
   <el-form-item >
-    <el-input v-model="formQuery.paramTwo" placeholder="学号/班号"></el-input>
+    <el-input v-model="formQuery.paramTwo" placeholder="手机号"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">查询</el-button>
+    <el-button type="primary" @click="getUser()">查询</el-button>
   </el-form-item>
   <el-form-item>
     <el-button type="success" @click="onSubmit">新增</el-button>
@@ -34,7 +34,10 @@
    <el-table-column
      prop="profile"
      label="头像"
-     width="100">
+     width="150">
+     <template v-slot:default="scope"> 
+          <el-image :src="scope.row.profile" style="height: 40px ;width: 40px;border-radius: 50%;" />
+        </template>    
    </el-table-column>
    <el-table-column
      prop="age"
@@ -76,6 +79,7 @@ export default{
        return{
          tableData:[],
          total:String,
+         page:1,
          formQuery: {
           paramOne: '',
           paramTwo: ''
@@ -87,7 +91,7 @@ export default{
        method: "post",
        headers: {'Content-Type': 'application/json'},
        url:"http://localhost:8080/user/getUser",
-       data:JSON.stringify({pageSize:10,PageNum:this.page}),
+       data:JSON.stringify({pageSize:10,pageNum:this.page}),
    })
       .then(res=>{
        this.tableData=res.data.data.list
@@ -98,13 +102,28 @@ export default{
      })
    },
    methods:{
+    getUser(){
+      axios({
+       method: "post",
+       headers: {'Content-Type': 'application/json'},
+       url:"http://localhost:8080/user/getUser",
+       data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
+   })
+      .then(res=>{
+       this.tableData=res.data.data.list
+       this.total=res.data.data.total
+       console.log(res)
+      }).catch(function (error){ 
+       console.log(error);
+     })
+    },
       handleCurrentChange(val){
         this.page=val
         axios({
         method: "post",
         headers: {'Content-Type': 'application/json'},
         url:"http://localhost:8080/user/getUser",
-        data:JSON.stringify({pageSize:10,pageNum:this.page}),
+        data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
          })
        .then(res=>{
         this.tableData=res.data.data.list
