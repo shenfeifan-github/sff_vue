@@ -37,8 +37,9 @@ const router=createRouter({
                 },
                 {
                     path:"/user",
-                    component:User
-                }
+                    component:User,
+                 
+            }
             ]
         },
         {

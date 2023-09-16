@@ -1,21 +1,56 @@
 <template>
-   <el-form :inline="true" :model="formInline" class="demo-form-inline">
+  <div class="zt-head">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline">
   <el-form-item >
-    <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
+    <el-input v-model="formQuery.paramOne" placeholder="姓名" class="input1"></el-input>
   </el-form-item>
   <el-form-item >
-    <el-input v-model="formQuery.paramTwo" placeholder="手机号"></el-input>
+    <el-input v-model="formQuery.paramTwo" placeholder="手机号" class="input1"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="getUser()">查询</el-button>
+    <el-button type="primary" @click="getUser()" class="but-1">查询</el-button>
   </el-form-item>
   <el-form-item>
-    <el-button type="success" @click="onSubmit">新增</el-button>
+    <el-dialog
+  title="新增用户"
+  v-model="dialogVisible"
+  width="50%" height="80px">
+  <el-form :model="userForm" :rules="rules" :inline="true" ref="userForm" label-width="80px" class="demo-ruleForm">
+   <el-form-item label="用户名称" prop="userName">
+    <el-input placeholder="请输入用户名称" v-model="userForm.userName"></el-input>
+   </el-form-item>
+   <el-form-item label="手机号" prop="phone">
+    <el-input placeholder="请输入手机号" v-model="userForm.phone"></el-input>
+   </el-form-item>
+   <el-form-item label="密码" prop="account">
+    <el-input placeholder="请输入密码" v-model="userForm.account"></el-input>
+   </el-form-item>
+   <el-form-item label="年龄" prop="age">
+    <el-input placeholder="请输入年龄" v-model="userForm.age"></el-input>
+   </el-form-item>
+   <el-form-item label="性别" prop="sex">
+    <el-select v-model="userForm.sex" placeholder="请选择性别">
+      <el-option label="男" value="0"></el-option>
+      <el-option label="女" value="1"></el-option>
+    </el-select>
   </el-form-item>
 </el-form>
+  
+<el-form-item>
+  <el-button :plain="true" type="primary" @click="submitForm('userForm')">创建</el-button>
+    <el-button @click="resetForm('userForm')">重置</el-button>
+</el-form-item>
+   
+
+</el-dialog>
+<el-button type="success" @click="dialogVisible = true" class="but-1">新增</el-button>
+  </el-form-item>
+</el-form>
+  </div>
+  <div class="zt-table">
     <el-table
    :data="tableData"
-   style="width: 100%">
+   style="width: 100%; height: 100%">
    <el-table-column
      prop="userName"
      label="用户名称"
@@ -63,13 +98,17 @@
       </el-row>
    </el-table-column>
  </el-table>
- <el-pagination
+  </div>
+    <div class="zt-fy">
+      <el-pagination
  background
     @current-change="handleCurrentChange"
     :current-page="this.page"
     layout="prev, pager, next"
     :total="total">
 </el-pagination>
+    </div>
+ 
 </template>
 <script>
 import axios from 'axios'
@@ -77,12 +116,41 @@ import axios from 'axios'
 export default{
    data(){
        return{
+        dialogVisible: false,
          tableData:[],
+         userForm:{
+        userName:'',
+        phone: '',
+        account: '',
+        age: '',
+        sex: '',
+         },
          total:String,
          page:1,
          formQuery: {
           paramOne: '',
           paramTwo: ''
+        },
+        rules: {
+          userName: [
+            { required: true, message: '请输入用户名称', trigger: 'blur' },
+          ],
+          phone: [
+            { required: true, message: '请输入手机号', trigger: 'blur' },
+            { min: 11, max: 11, message: '手机号格式错误', trigger: 'blur' }
+             ],
+             account: [
+            { required: true, message: '请输入密码', trigger: 'blur' }
+          ],
+          age: [
+            { required: true, message: '请输入年龄', trigger: 'blur' }
+          ],
+          sex: [
+            { required: true, message: '请选择性别', trigger: 'blur' }
+          ],
+       
+         
+       
         }
        }
       },
@@ -117,45 +185,72 @@ export default{
        console.log(error);
      })
     },
+    saveUser(){
+      axios({
+       method: "post",
+       headers: {'Content-Type': 'application/json'},
+       url:"http://localhost:8080/user/saveUser",
+       data:JSON.stringify(this.userForm),
+   })
+      .then(res=>{
+       this.tableData=res.data.data.list
+       this.total=res.data.data.total
+       console.log(res)
+      }).catch(function (error){ 
+       console.log(error);
+     })
+    },
       handleCurrentChange(val){
         this.page=val
-        axios({
-        method: "post",
-        headers: {'Content-Type': 'application/json'},
-        url:"http://localhost:8080/user/getUser",
-        data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
-         })
-       .then(res=>{
-        this.tableData=res.data.data.list
-        this.total=res.data.data.total
-        console.log(res)
-       }).catch(function (error){ 
-        console.log(error);
-      })
+      this.getUser()
   },
+  submitForm(formName) {
+    this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.dialogVisible=false
+             this.saveUser();
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
-}
+    }
+      }
+
 
 </script>
 <style>
-  .search{
-   display:flex;
-   width: 600px;
-   height: 70px;
-   
-   .el-input{
-     width: 180px;
-     height: 40px;
-     margin: auto;
-     margin-left: 20px;
-   }
+.zt-head{
+  display:flex;
+ 
+   width: 100%;
+   height: 10%;
+}
+.zt-table{
+  display:flex;
+   width: 100%;
+   height: 80%;
+}
+.zt-fy{
+  display:flex;
+  justify-content: center;
+  margin-top: 5px;
+   width: 100%;
+   height:10%;
+}
+  
+ .input1{
+   margin-top: -15px;
+   margin-left: 20px;
+ }
+ .but-1{
+  margin-top: -15px;
+ }
  
 
- }
- .el-pagination{
-  position: absolute;
-  top: 90%;
-   margin-left:40%;
-}
 
 </style>

@@ -9,6 +9,7 @@
 <style>
   .el-main{
     background-color:#E4E7ED;
+    height: 90vh;
     
    
   }

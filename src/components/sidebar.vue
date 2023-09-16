@@ -34,12 +34,13 @@ display: none;
 }
 .el-aside{
      background-color: darkcyan;;
-    height: 100vh;;
-    width: auto;
+    height: 100vh;
+    width:auto;
 }
 .el-menu{
     background-color: darkcyan;
     width: 200px;
+    height: 100%;
 }
 .logo{
 display: flex;

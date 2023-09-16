@@ -7,7 +7,7 @@
         <el-row class="demo-avatar demo-basic">
          <el-col :span="12">
           <div>
-             <div class="block"><el-avatar :size="50" :src="url"></el-avatar></div>
+             <div class="block"><el-avatar :size="50" :src="userInfo.profile"></el-avatar></div>
           </div>
          </el-col>  
         </el-row>
@@ -16,16 +16,16 @@
       <template v-slot:dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>
-            <el-button type="primary" icon="el-icon-check"  @click="open">
+                <el-button type="primary" icon="el-icon-check">
                 用户信息</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
             <el-button type="warning" icon="el-icon-check"
-              >修改头像</el-button
-            ></el-dropdown-item>
+              >修改头像</el-button>
+            </el-dropdown-item>
           <el-dropdown-item>
-            <el-button type="danger" icon="el-icon-check"
-              >退出登录</el-button
+            <el-button type="danger" icon="el-icon-check">
+              退出登录</el-button
             ></el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -37,7 +37,7 @@
   export default {
     data () {
       return {
-        url: "https://shenfeifan.oss-cn-guangzhou.aliyuncs.com/2023-09-06/135024.jpg",
+        userInfo:[]
       }
     },
     methods: {
@@ -45,17 +45,21 @@
         this.$alert('message', '用户信息', {
           confirmButtonText: '确定',
           callback: action => {
-           
           }
         });
       }
-    }
+    },
+    created() {
+   this.userInfo = JSON.parse(localStorage.getItem('userInfo'));//将全局缓存的token数据赋值给token
+   console.log('获取到的缓存数据',this.userInfo)
+},
   }
 </script>
 <style>
   .el-header{
    display: flex;
       background-color: #c7e4f8;
+      height: 10vh;
     
   }
  #title{

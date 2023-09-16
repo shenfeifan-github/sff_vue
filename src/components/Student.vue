@@ -10,7 +10,8 @@
     <el-button type="primary" @click="getStudent()">查询</el-button>
   </el-form-item>
   <el-form-item>
-    <el-button type="success" @click="onSubmit">新增</el-button>
+    <el-button type="success" >新增</el-button>
+  
   </el-form-item>
 </el-form>
   <el-table
@@ -54,74 +55,68 @@
 </template>
 <script>
 import axios from 'axios'
-import { getPositionDataWithUnit } from 'element-plus'
-
 export default{
-    data(){
-        return{
-          tableData:[],
-          total:String,
-          page:1,
-          formQuery: {
-          paramOne: '',
-          paramTwo: ''
-        }
-         
-        }
-       },
-     
-       mounted(){
-    
+    data() {
+        return {
+            tableData: [],
+            total: String,
+            page: 1,
+            formQuery: {
+                paramOne: '',
+                paramTwo: '',
+          
+            }
+        };
+    },
+    mounted() {
         axios({
-        method: "post",
-        headers: {'Content-Type': 'application/json'},
-        url:"http://localhost:8080/student/getStudent",
-        data:JSON.stringify({pageSize:10,PageNum:this.page}),
-    })
-        
-       .then(res=>{
-        this.tableData=res.data.data.list
-        this.total=res.data.data.total
-        console.log(res)
-       }).catch(function (error){ 
-        console.log(error);
-      })
-  },
-     methods:{
-      getStudent(){
-        axios({
-        method: "post",
-        headers: {'Content-Type': 'application/json'},
-        url:"http://localhost:8080/student/getStudent",
-        data:JSON.stringify({paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
-    })
-        
-       .then(res=>{
-        this.tableData=res.data.data.list
-        this.total=res.data.data.total
-        console.log(res)
-       }).catch(function (error){ 
-        console.log(error);
-      })
-      },
-      handleCurrentChange(val){
-        this.page=val
-        axios({
-        method: "post",
-        headers: {'Content-Type': 'application/json'},
-        url:"http://localhost:8080/student/getStudent",
-        data:JSON.stringify({pageSize:10,pageNum:this.page,paramOne:this.formQuery.paramOne,paramTwo:this.formQuery.paramTwo}),
-         })
-       .then(res=>{
-        this.tableData=res.data.data.list
-        this.total=res.data.data.total
-        console.log(res)
-       }).catch(function (error){ 
-        console.log(error);
-      })
-  },
-      }
-     }
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            url: "http://localhost:8080/student/getStudent",
+            data: JSON.stringify({ pageSize: 10, PageNum: this.page }),
+        })
+            .then(res => {
+            this.tableData = res.data.data.list;
+            this.total = res.data.data.total;
+            console.log(res);
+        }).catch(function (error) {
+            console.log(error);
+        });
+    },
+    methods: {
+        getStudent() {
+            axios({
+                method: "post",
+                headers: { 'Content-Type': 'application/json' },
+                url: "http://localhost:8080/student/getStudent",
+                data: JSON.stringify({ paramOne: this.formQuery.paramOne, paramTwo: this.formQuery.paramTwo }),
+            })
+                .then(res => {
+                this.tableData = res.data.data.list;
+                this.total = res.data.data.total;
+                console.log(res);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        handleCurrentChange(val) {
+            this.page = val;
+            axios({
+                method: "post",
+                headers: { 'Content-Type': 'application/json' },
+                url: "http://localhost:8080/student/getStudent",
+                data: JSON.stringify({ pageSize: 10, pageNum: this.page, paramOne: this.formQuery.paramOne, paramTwo: this.formQuery.paramTwo }),
+            })
+                .then(res => {
+                this.tableData = res.data.data.list;
+                this.total = res.data.data.total;
+                console.log(res);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+    },
+}
       
 </script>
 <style>
