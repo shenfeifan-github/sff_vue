@@ -50,6 +50,7 @@
   <div class="zt-table">
     <el-table
    :data="tableData"
+    border
    style="width: 100%; height: 100%">
    <el-table-column
      prop="userName"
@@ -69,7 +70,7 @@
    <el-table-column
      prop="profile"
      label="头像"
-     width="150">
+     width="100">
      <template v-slot:default="scope"> 
           <el-image :src="scope.row.profile" style="height: 40px ;width: 40px;border-radius: 50%;" />
         </template>    
@@ -87,15 +88,18 @@
    <el-table-column
      prop="createTime"
      label="创建日期"
-     width="200">
+     width="250">
    </el-table-column>
    <el-table-column
      label="操作"
-     width="200">
-     <el-row>
+     width="330">
+     <template #default="scope">
+      <el-row>
        <el-button type="success">编辑</el-button>
-       <el-button type="danger">删除</el-button>
+       <el-button type="danger" @click="removeUserById(scope.row)">删除</el-button>
       </el-row>
+     </template>
+    
    </el-table-column>
  </el-table>
   </div>
@@ -118,6 +122,7 @@ export default{
        return{
         dialogVisible: false,
          tableData:[],
+         removeUser:[],
          userForm:{
         userName:'',
         phone: '',
@@ -204,6 +209,21 @@ export default{
         this.page=val
       this.getUser()
   },
+  removeUserById(row){
+    axios({
+      method: "post",
+      headers: { 'Content-Type': 'multipart/form-data'},
+      url:"http://localhost:8080/user/removeUser",
+      data:{ids:row.id}
+    }).then(res=>{
+      this.removeUser=res.data
+      this.getUser()
+      this.open()
+    }).catch(function(error){
+      this.removeUser=res.data
+      this.open()
+    })
+  },
   submitForm(formName) {
     this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -217,7 +237,18 @@ export default{
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      }
+      },
+      open() {
+        console.log(this.removeUser)
+        if(this.removeUser.code==10200){
+          this.$message({
+          message:this.removeUser.message,
+          type: 'success',
+          })
+        }else{
+          this.$message.error(this.removeUser.message);
+        }
+      },
     }
       }
 
