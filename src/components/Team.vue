@@ -1,19 +1,24 @@
 <template>
+   <div class="zt-head">
        <el-form :inline="true" :model="formQuery" class="demo-form-inline">
   <el-form-item >
-    <el-input v-model="formQuery.paramOne" placeholder="班号/班级名称"></el-input>
+    <el-input v-model="formQuery.paramOne" placeholder="班号/班级名称" class="input1"></el-input>
   </el-form-item>
   <el-form-item >
-    <el-input v-model="formQuery.paramTwo" placeholder="班主任/班长/学习委员"></el-input>
+    <el-input v-model="formQuery.paramTwo" placeholder="班主任/班长/学习委员" class="input1"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="getTeam()">查询</el-button>
+    <el-button type="primary" @click="getTeam()" class="but-1">查询</el-button>
   </el-form-item>
   <el-form-item>
-    <el-button type="success" @click="onSubmit">新增</el-button>
+    <el-button type="success" @click="onSubmit" class="but-1">新增</el-button>
   </el-form-item>
 </el-form>
+   </div>
+<div class="zt-table">
      <el-table
+     border
+     
     :data="tableData"
     style="width: 100%">
     <el-table-column
@@ -54,11 +59,14 @@
        </el-row>
     </el-table-column>
   </el-table>
+</div>
+<div class="zt-fy">
   <el-pagination
     background
     layout="prev, pager, next"
     :total="total">
 </el-pagination>
+</div>
 </template>
 <script>
 import axios from 'axios'

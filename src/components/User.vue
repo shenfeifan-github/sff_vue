@@ -12,7 +12,7 @@
   </el-form-item>
   <el-form-item>
     <el-dialog
-  title="新增用户"
+  :title=dialogName
   v-model="dialogVisible"
   width="50%" height="80px">
   <el-form :model="userForm" :rules="rules" :inline="true" ref="userForm" label-width="80px" class="demo-ruleForm">
@@ -37,13 +37,13 @@
 </el-form>
   
 <el-form-item>
-  <el-button :plain="true" type="primary" @click="submitForm('userForm')">创建</el-button>
+  <el-button :plain="true" type="primary" @click="submitForm('userForm')">确认</el-button>
     <el-button @click="resetForm('userForm')">重置</el-button>
 </el-form-item>
    
 
 </el-dialog>
-<el-button type="success" @click="dialogVisible = true" class="but-1">新增</el-button>
+<el-button type="success" @click="addUser()" class="but-1">新增</el-button>
   </el-form-item>
 </el-form>
   </div>
@@ -51,7 +51,7 @@
     <el-table
    :data="tableData"
     border
-   style="width: 100%; height: 100%">
+   style="width: 100%">
    <el-table-column
      prop="userName"
      label="用户名称"
@@ -95,7 +95,7 @@
      width="330">
      <template #default="scope">
       <el-row>
-       <el-button type="success">编辑</el-button>
+       <el-button type="success" @click="updateUserById(scope.row)">编辑</el-button>
        <el-button type="danger" @click="removeUserById(scope.row)">删除</el-button>
       </el-row>
      </template>
@@ -121,8 +121,10 @@ export default{
    data(){
        return{
         dialogVisible: false,
+         dialogName:'',
          tableData:[],
-         removeUser:[],
+         message:String,
+         code:Number,
          userForm:{
         userName:'',
         phone: '',
@@ -198,9 +200,12 @@ export default{
        data:JSON.stringify(this.userForm),
    })
       .then(res=>{
-       this.tableData=res.data.data.list
-       this.total=res.data.data.total
-       console.log(res)
+       this.message=res.data.message
+       this.code=res.data.code
+       if( this.code==10200){
+        this.getUser()
+       }
+       this.open()
       }).catch(function (error){ 
        console.log(error);
      })
@@ -216,13 +221,22 @@ export default{
       url:"http://localhost:8080/user/removeUser",
       data:{ids:row.id}
     }).then(res=>{
-      this.removeUser=res.data
+      this.message=res.data.message
+      this.code=res.data.code
       this.getUser()
       this.open()
     }).catch(function(error){
-      this.removeUser=res.data
-      this.open()
+      console.log(error);
     })
+  },
+  addUser(){
+    this.dialogVisible = true
+    this.dialogName="新增用户"
+  },
+  updateUserById(row){
+    this.dialogVisible = true
+    this.dialogName="编辑用户"
+    this.userForm={...row}
   },
   submitForm(formName) {
     this.$refs[formName].validate((valid) => {
@@ -239,14 +253,13 @@ export default{
         this.$refs[formName].resetFields();
       },
       open() {
-        console.log(this.removeUser)
-        if(this.removeUser.code==10200){
+        if(this.code==10200){
           this.$message({
-          message:this.removeUser.message,
+          message:this.message,
           type: 'success',
           })
         }else{
-          this.$message.error(this.removeUser.message);
+          this.$message.error(this.message);
         }
       },
     }

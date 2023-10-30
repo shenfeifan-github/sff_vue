@@ -1,11 +1,11 @@
 <template>
-
+<div class="zt-head">
 <el-form :inline="true" :model="formQuery" class="demo-form-inline">
   <el-form-item >
-    <el-input v-model="formQuery.paramOne" placeholder="姓名"></el-input>
+    <el-input v-model="formQuery.paramOne" placeholder="姓名" class="input1"></el-input>
   </el-form-item>
   <el-form-item >
-    <el-select v-model="team.value" placeholder="请选择班级">
+    <el-select v-model="team.value" placeholder="请选择班级" class="input1">
     <el-option 
       v-for="item in team" @change="change"	
       :key="item.codeshare"
@@ -15,14 +15,14 @@
   </el-select>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="getScore()">查询</el-button>
+    <el-button type="primary" @click="getScore()" class="but-1">查询</el-button>
   </el-form-item>
   <el-form-item>
-    <el-button type="success" @click="onSubmit">导出</el-button>
+    <el-button type="success" @click="onSubmit" class="but-1">导出</el-button>
   </el-form-item>
 </el-form>
-
-
+</div>
+<div class="zt-table">
     <el-table
     :data="tableData"
     border
@@ -73,6 +73,8 @@
       label="总分">
     </el-table-column>
   </el-table>
+</div>
+<div class="zt-fy">
   <el-pagination
   background
      @current-change="handleCurrentChange"
@@ -80,6 +82,7 @@
     layout="prev, pager, next"
     :total="total">
 </el-pagination>
+</div>
 </template>
 <script>
 import axios from 'axios'
